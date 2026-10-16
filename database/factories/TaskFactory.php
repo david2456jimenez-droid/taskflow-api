@@ -2,7 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\TaskPriority;
+use App\Enums\TaskStatus;
+use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,15 +14,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TaskFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'project_id' => Project::factory(),
+            'assigned_to' => User::factory(),
+            'created_by' => User::factory(),
+            'title' => ucfirst(fake()->words(4, true)),
+            'description' => fake()->paragraph(),
+            'due_date' => fake()->dateTimeBetween('now', '+2 months'),
+            'priority' => fake()->randomElement(TaskPriority::cases()),
+            'status' => fake()->randomElement(TaskStatus::cases()),
         ];
     }
 }
